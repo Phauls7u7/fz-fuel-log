@@ -218,6 +218,9 @@ private fun HeaderBar(state: TrackerUiState, onEditClick: () -> Unit) {
 
 @Composable
 private fun LiveTelemetryCard(state: TrackerUiState, onEditClick: () -> Unit) {
+    val consumedLiters = state.consumedGallonsEstimate * 3.78541
+    val pricePerLiter = state.pricePerGallon / 3.78541
+
     Card(
         colors = CardDefaults.cardColors(containerColor = SurfaceDark),
         border = BorderStroke(1.dp, BorderDark),
@@ -283,20 +286,32 @@ private fun LiveTelemetryCard(state: TrackerUiState, onEditClick: () -> Unit) {
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
+                    Text(
+                        text = String.format(Locale.US, "%.2f L", consumedLiters),
+                        color = AmberWarn,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
 
                 Column(horizontalAlignment = Alignment.End) {
                     Text("COSTO GASOLINA SÚPER", color = TextSecondary, fontSize = 11.sp)
                     Text(
+                        text = String.format(Locale.US, "$%.2f", state.consumedDollarsEstimate),
+                        color = TextPrimary,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
                         text = String.format(
                             Locale.US,
-                            "$%.2f (@$%.2f/gal)",
-                            state.consumedDollarsEstimate,
-                            state.pricePerGallon
+                            "@ $%.2f/gal | $%.2f/L",
+                            state.pricePerGallon,
+                            pricePerLiter
                         ),
-                        color = TextPrimary,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
+                        color = TextSecondary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
